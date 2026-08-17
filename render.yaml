@@ -1,0 +1,23 @@
+databases:
+  - name: linkplease-db
+    plan: free
+    ipAllowList: [] # Allow internal access from Render services
+
+services:
+  - type: web
+    name: linkplease-backend
+    plan: free
+    runtime: docker
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: linkplease-db
+          property: connectionString
+      - key: WEBHOOK_SIGNATURE_REQUIRED
+        value: "true"
+      - key: MAX_DM_RETRIES
+        value: "5"
+      - key: MOCK_API_BASE_URL
+        value: "https://pseudogram-api.onrender.com"
+      - key: PSEUDOGRAM_API_KEY
+        sync: false # This will prompt the user to input the key in Render's dashboard during deployment
